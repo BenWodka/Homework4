@@ -220,7 +220,8 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 	{
 		pthread_mutex_lock(&lock);
 		//Try to cross
-			while (movingcar >=3 || movingtruck >= 1){
+			while (movingtruck >= 1 || waitingtrucksouth > 0 || waitingtrucknorth > 0 ||
+              (movingcar >= 3) || (currentmovingdir != pmstrpara->direction && (movingcar > 0 || movingtruck > 0))){
 				printf("Waiting to cross...\n");
 				if(pmstrpara->direction == 0){
 					pthread_cond_wait(&CarNorthMovable, &lock);
@@ -228,9 +229,12 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 					pthread_cond_wait(&CarSouthMovable, &lock);
 				}
 		}
-		movinglistinsert(pmstrpara->vehicle_id, pmstrpara->vehicle_type, pmstrpara->direction);
+		waitinglistdelete(pmstrpara->vehicle_id);
 		movingcar++;
+		currentmovingdir = pmstrpara->direction;
+		movinglistinsert(pmstrpara->vehicle_id, pmstrpara->vehicle_type, pmstrpara->direction);
 		printmoving();
+		printwaiting();
 		pthread_mutex_unlock(&lock);
 
 		sleep(2);
@@ -246,10 +250,14 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 
 		pthread_cond_signal(&CarNorthMovable);
 		pthread_cond_signal(&CarSouthMovable);
+		pthread_cond_signal(&TruckNorthMovable);
+		pthread_cond_signal(&TruckSouthMovable);
 
 		//update global variables
 		//send out signals to wake up vehicle(s) accordingly
     	fprintf(stderr,"\nCar #%d exited the bridge.\n", pmstrpara->vehicle_id);
+		printmoving();
+		printwaiting();
 
 		pthread_mutex_unlock(&lock);
 
@@ -261,22 +269,45 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 	{
 		pthread_mutex_lock(&lock);
 		//Try to cross
-		//while (this vehicle cannot cross) {
-		//     wait for proper moving signal
-		//}
+		while(movingcar > 0 && currentmovingdir != pmstrpara->direction && movingtruck > 0){
+				printf("Waiting to cross...\n");
+				if(pmstrpara->direction == 0){
+					pthread_cond_wait(&TruckNorthMovable, &lock);
+				} else {
+					pthread_cond_wait(&TruckSouthMovable, &lock);
+				}
+		}
 
+		waitinglistdelete(pmstrpara->vehicle_id);
+		movingtruck++;
+		currentmovingdir = pmstrpara->direction;
+		movinglistinsert(pmstrpara->vehicle_id, pmstrpara->vehicle_type, pmstrpara->direction);
+		printmoving();
+		printwaiting();
 
 		//Now begin accrossing
 		//update global variables
 		//print out proper message
 
+		pthread_mutex_unlock(&lock);
 
 		sleep(2);	//delay (2)
 
 		pthread_mutex_lock(&lock);
+
+		movingtruck--;
+		movinglistdelete(pmstrpara->vehicle_id);
+
+		pthread_cond_signal(&CarNorthMovable);
+		pthread_cond_signal(&CarSouthMovable);
+		pthread_cond_signal(&TruckNorthMovable);
+		pthread_cond_signal(&TruckSouthMovable);
+
 		//update global variables
 		//send out signals to wake up vehicle(s) accordingly
 		fprintf(stderr,"\nTruck #%d exited the bridge.\n", pmstrpara->vehicle_id);
+		printmoving();
+		printwaiting();
 
 		pthread_mutex_unlock(&lock);
 
