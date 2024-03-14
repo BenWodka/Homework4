@@ -243,7 +243,29 @@ int main(void)
 
 	else if(option==3) // 20 vehicles
 	{
-        //similar to option 1
+        pthread_mutex_lock(&lock);
+		
+		for (int j = 0; j <= 19; j++) {
+			
+			int vehicle_id = j; // all of the vehicles are cars
+			int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int direction = rand() % 2;
+			
+			pmstr_t* pmthread = malloc(sizeof(pmstr_t));
+			pmthread->vehicle_id = vehicle_id;
+			pmthread->vehicle_type = vehicle_type;
+			pmthread->direction = direction;
+			
+			pthread_create(&vehicle[j], NULL, (void *)vehicle_routine, (void *)pmthread);
+
+			//pthread_join(pmthread, NULL);
+		}
+		
+		pthread_mutex_unlock(&lock);
+
+		for (int j = 0; j <= 19; j++) {
+			pthread_join(vehicle[i], NULL);
+		}		
 	} // end of option3
 
 	else if(option==4) // 30 vehicles
@@ -328,18 +350,21 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 	{
 		pthread_mutex_lock(&lock);
 		//Try to cross
+		
 		while(movingcar > 0 || movingtruck > 0){
 				printf("Waiting to cross...\n");
-				if(pmstrpara->direction == 0){
+				if(currentmovingdir == 0){
 					pthread_cond_wait(&TruckNorthMovable, &lock);
+					currentmovingdir = 1;
 				} else {
 					pthread_cond_wait(&TruckSouthMovable, &lock);
+					currentmovingdir = 0;
 				}
 		}
 
 		waitinglistdelete(pmstrpara->vehicle_id);
 		movingtruck++;
-		currentmovingdir = pmstrpara->direction;
+		//currentmovingdir = pmstrpara->direction;
 
 		movinglistinsert(pmstrpara->vehicle_id, pmstrpara->vehicle_type, pmstrpara->direction);
 		printmoving();
@@ -381,14 +406,14 @@ void vehicle_arrival(pmstr_t *pmstrpara)
 {
 	if(pmstrpara->vehicle_type == 1)
 	{
-		if (pmstrpara->direction == 1)
+		if (pmstrpara->direction == 0)
 			waitingcarsouth++;
 		else
 			waitingcarnorth++;
 	}
 	else
 	{
-		if (pmstrpara->direction == 2) 
+		if (pmstrpara->direction == 1) 
 			waitingtrucksouth++;
 		else
 			waitingtrucknorth++;
@@ -397,14 +422,14 @@ void vehicle_arrival(pmstr_t *pmstrpara)
 
 	if(pmstrpara->vehicle_type == 1)
 	{
-		if (pmstrpara->direction == 1)
+		if (pmstrpara->direction == 0)
 			fprintf(stderr,"\nCar #%d (southbound) arrived.\n",pmstrpara->vehicle_id);
 		else
 			fprintf(stderr,"\nCar #%d (northbound) arrived.\n",pmstrpara->vehicle_id);
 	}
 	else
 	{
-		if (pmstrpara->direction == 2)
+		if (pmstrpara->direction == 0)
 			fprintf(stderr,"\nTruck #%d (southbound) arrived.\n",pmstrpara->vehicle_id);
 		else
 			fprintf(stderr,"\nTruck #%d (northbound) arrived.\n",pmstrpara->vehicle_id);
@@ -528,7 +553,7 @@ void printwaiting()
 	fprintf(stderr,"Waiting Vehicles (Southbound): [");
 	while(p)
 	{
-		if(p->direction)
+		if(p->direction == 1)
 		{
 			if (p->vehicle_type == 1)
 		 		fprintf(stderr,"Car #%d,",p->vehicle_id);
