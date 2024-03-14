@@ -168,12 +168,18 @@ int main(void)
 			pthread_create(&vehicle[j], NULL, (void *)vehicle_routine, (void *)pmthread);
 			//pthread_join(pmthread, NULL);
 		}
-		
 		pthread_mutex_unlock(&lock);
-		
-		for (int j = 0; j <= 19; j++)
-			pthread_join(vehicle[j], NULL);
 
+		
+		for (int j = 0; j <= 19; j++){
+			printf("Joining thread %d: %lu\n",j,(unsigned long)vehicle[j]);
+			
+			pthread_join(vehicle[j], NULL);
+			
+			}
+
+		
+		
 	} // end of option 1
 
 
@@ -259,14 +265,18 @@ int main(void)
 			
 			pthread_create(&vehicle[j], NULL, (void *)vehicle_routine, (void *)pmthread);
 
+			
+
 			//pthread_join(pmthread, NULL);
 		}
 		
 		pthread_mutex_unlock(&lock);
 
-		for (int j = 0; j <= 19; j++) {
-			pthread_join(vehicle[i], NULL);
-		}		
+		for (int j = 0; j <= 19; j++){
+			printf("Joining thread %d: %lu\n",j,(unsigned long)vehicle[j]);
+			pthread_join(vehicle[j], NULL);
+			
+			}
 	} // end of option3
 
 	else if(option==4) // 30 vehicles
@@ -570,6 +580,12 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 		movingcar--;
 		movinglistdelete(pmstrpara->vehicle_id);
 
+		printwaiting();
+		printf("\nmoving truck: %d",movingtruck);
+		printf("\nmoving car: %d",movingcar);
+		printf("\nwaiting truck south: %d",waitingtrucksouth);
+		printf("\nwaiting truck north: %d",waitingtrucknorth);
+
 		if (waitingtrucksouth > 0 || waitingtrucknorth > 0) {
     	// If trucks are waiting, signal them preferably
 			pthread_cond_signal(&TruckNorthMovable);
@@ -598,10 +614,14 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 		while(movingcar > 0 || movingtruck > 0){
 				printf("Waiting to cross...\n");
 				if(currentmovingdir == 0){
+					
 					pthread_cond_wait(&TruckNorthMovable, &lock);
+					waitingtrucknorth--;
 					currentmovingdir = 1;
-				} else {
+				} else {	
+					
 					pthread_cond_wait(&TruckSouthMovable, &lock);
+					waitingtrucksouth--;
 					currentmovingdir = 0;
 				}
 		}
@@ -626,6 +646,12 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 		movingtruck--;
 		movinglistdelete(pmstrpara->vehicle_id);
 
+		printwaiting();
+		printf("\nmoving truck: %d",movingtruck);
+		printf("\nmoving car: %d",movingcar);
+		printf("\nwaiting truck south: %d",waitingtrucksouth);
+		printf("\nwaiting truck north: %d",waitingtrucknorth);
+
 		if (waitingtrucksouth > 0 || waitingtrucknorth > 0) {
 			// If trucks are waiting, signal them preferably
 			pthread_cond_signal(&TruckNorthMovable);
@@ -644,7 +670,8 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 
 		pthread_mutex_unlock(&lock);
 
-		free(pmstrpara);
+		pthread_cancel(pmstrpara);
+		//free(pmstrpara);
 	}
 	
 
