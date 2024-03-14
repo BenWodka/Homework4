@@ -235,8 +235,9 @@ int main(void)
 		
 		pthread_mutex_unlock(&lock);
 		
-		for (int j = 0; j <= 19; j++)
+		for (int j = 0; j <= 19; j++){
 			pthread_join(vehicle[j], NULL);
+		}
 		//similar to option 1
 	} //end of option 2
 
@@ -271,19 +272,257 @@ int main(void)
 	else if(option==4) // 30 vehicles
 	{
 
-		//similar to option 1
+		pthread_mutex_lock(&lock);
+		
+		for (int j = 0; j <= 9; j++) {
+			// Generate a random float between 0 and 1
+			
+			// Determine vehicle type based on carprob
+			// call rand() to decide vehicle type and direction
+			// generate pmstr_t struct to save the vehicle type, direction, and id
+			// call vehicle_arrival()
+			// create a pthread to represent the vehicle, vehicle_routine() is the start function of a pthread
+			
+			int vehicle_id = j; // all of the vehicles are cars
+			//int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car 2 for truck
+			int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int direction = rand() % 2;
+			
+			pmstr_t* pmthread = malloc(sizeof(pmstr_t));
+			pmthread->vehicle_id = vehicle_id;
+			pmthread->vehicle_type = vehicle_type;
+			pmthread->direction = direction;
+			
+			pthread_create(&vehicle[j], NULL, (void *)vehicle_routine, (void *)pmthread);
+			//pthread_join(pmthread, NULL);
+		}
+		
+		pthread_mutex_unlock(&lock);
+		
+		sleep(25);
+		
+		pthread_mutex_lock(&lock);
+		
+		for (int j = 10; j <= 19; j++) {
+			// Generate a random float between 0 and 1
+			
+			// Determine vehicle type based on carprob
+			// call rand() to decide vehicle type and direction
+			// generate pmstr_t struct to save the vehicle type, direction, and id
+			// call vehicle_arrival()
+			// create a pthread to represent the vehicle, vehicle_routine() is the start function of a pthread
+			
+			int vehicle_id = j; // all of the vehicles are cars
+			//int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int direction = rand() % 2;
+			
+			pmstr_t* pmthread = malloc(sizeof(pmstr_t));
+			pmthread->vehicle_id = vehicle_id;
+			pmthread->vehicle_type = vehicle_type;
+			pmthread->direction = direction;
+			
+			pthread_create(&vehicle[j], NULL, (void *)vehicle_routine, (void *)pmthread);
+			//pthread_join(pmthread, NULL);
+		}
+		
+		pthread_mutex_unlock(&lock);
+
+		sleep(25);
+		
+		pthread_mutex_lock(&lock);
+		
+		for (int j = 20; j <= 29; j++) {
+			// Generate a random float between 0 and 1
+			
+			// Determine vehicle type based on carprob
+			// call rand() to decide vehicle type and direction
+			// generate pmstr_t struct to save the vehicle type, direction, and id
+			// call vehicle_arrival()
+			// create a pthread to represent the vehicle, vehicle_routine() is the start function of a pthread
+			
+			int vehicle_id = j; // all of the vehicles are cars
+			//int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int direction = rand() % 2;
+			
+			pmstr_t* pmthread = malloc(sizeof(pmstr_t));
+			pmthread->vehicle_id = vehicle_id;
+			pmthread->vehicle_type = vehicle_type;
+			pmthread->direction = direction;
+			
+			pthread_create(&vehicle[j], NULL, (void *)vehicle_routine, (void *)pmthread);
+			//pthread_join(pmthread, NULL);
+		}
+		
+		pthread_mutex_unlock(&lock);
+
+
+		
+		for (int j = 0; j <= 29; j++){
+			pthread_join(vehicle[j], NULL);
+		}
 
 	} // end of option4
 
 	else if(option==5) // 30 vehicles
 	{
-        //similar to option 1
+        pthread_mutex_lock(&lock);
+		
+		for (int j = 0; j <= 9; j++) {
+			// Generate a random float between 0 and 1
+			
+			// Determine vehicle type based on carprob
+			// call rand() to decide vehicle type and direction
+			// generate pmstr_t struct to save the vehicle type, direction, and id
+			// call vehicle_arrival()
+			// create a pthread to represent the vehicle, vehicle_routine() is the start function of a pthread
+			
+			int vehicle_id = j; // all of the vehicles are cars
+			//int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car 2 for truck
+			int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int direction = rand() % 2;
+			
+			pmstr_t* pmthread = malloc(sizeof(pmstr_t));
+			pmthread->vehicle_id = vehicle_id;
+			pmthread->vehicle_type = vehicle_type;
+			pmthread->direction = direction;
+			
+			pthread_create(&vehicle[j], NULL, (void *)vehicle_routine, (void *)pmthread);
+			//pthread_join(pmthread, NULL);
+		}
+		
+		pthread_mutex_unlock(&lock);
+		
+		sleep(3);
+		
+		pthread_mutex_lock(&lock);
+		
+		for (int j = 10; j <= 19; j++) {
+			// Generate a random float between 0 and 1
+			
+			// Determine vehicle type based on carprob
+			// call rand() to decide vehicle type and direction
+			// generate pmstr_t struct to save the vehicle type, direction, and id
+			// call vehicle_arrival()
+			// create a pthread to represent the vehicle, vehicle_routine() is the start function of a pthread
+			
+			int vehicle_id = j; // all of the vehicles are cars
+			//int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int direction = rand() % 2;
+			
+			pmstr_t* pmthread = malloc(sizeof(pmstr_t));
+			pmthread->vehicle_id = vehicle_id;
+			pmthread->vehicle_type = vehicle_type;
+			pmthread->direction = direction;
+			
+			pthread_create(&vehicle[j], NULL, (void *)vehicle_routine, (void *)pmthread);
+			//pthread_join(pmthread, NULL);
+		}
+		
+		pthread_mutex_unlock(&lock);
+
+		sleep(10);
+		
+		pthread_mutex_lock(&lock);
+		
+		for (int j = 20; j <= 29; j++) {
+			// Generate a random float between 0 and 1
+			
+			// Determine vehicle type based on carprob
+			// call rand() to decide vehicle type and direction
+			// generate pmstr_t struct to save the vehicle type, direction, and id
+			// call vehicle_arrival()
+			// create a pthread to represent the vehicle, vehicle_routine() is the start function of a pthread
+			
+			int vehicle_id = j; // all of the vehicles are cars
+			//int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int direction = rand() % 2;
+			
+			pmstr_t* pmthread = malloc(sizeof(pmstr_t));
+			pmthread->vehicle_id = vehicle_id;
+			pmthread->vehicle_type = vehicle_type;
+			pmthread->direction = direction;
+			
+			pthread_create(&vehicle[j], NULL, (void *)vehicle_routine, (void *)pmthread);
+			//pthread_join(pmthread, NULL);
+		}
+		
+		pthread_mutex_unlock(&lock);
+
+
+		
+		for (int j = 0; j <= 29; j++){
+			pthread_join(vehicle[j], NULL);
+		}
 
 	} // end of option5
 
 	else //option6: 30 vehicles
 	{
-       //similar to option 1
+      
+	  pthread_mutex_lock(&lock);
+		
+		for (int j = 0; j <= 19; j++) {
+			// Generate a random float between 0 and 1
+			
+			// Determine vehicle type based on carprob
+			// call rand() to decide vehicle type and direction
+			// generate pmstr_t struct to save the vehicle type, direction, and id
+			// call vehicle_arrival()
+			// create a pthread to represent the vehicle, vehicle_routine() is the start function of a pthread
+			
+			int vehicle_id = j; // all of the vehicles are cars
+			//int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car 2 for truck
+			int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int direction = rand() % 2;
+			
+			pmstr_t* pmthread = malloc(sizeof(pmstr_t));
+			pmthread->vehicle_id = vehicle_id;
+			pmthread->vehicle_type = vehicle_type;
+			pmthread->direction = direction;
+			
+			pthread_create(&vehicle[j], NULL, (void *)vehicle_routine, (void *)pmthread);
+			//pthread_join(pmthread, NULL);
+		}
+		
+		pthread_mutex_unlock(&lock);
+		
+		sleep(15);
+		
+		pthread_mutex_lock(&lock);
+		
+		for (int j = 20; j <= 29; j++) {
+			// Generate a random float between 0 and 1
+			
+			// Determine vehicle type based on carprob
+			// call rand() to decide vehicle type and direction
+			// generate pmstr_t struct to save the vehicle type, direction, and id
+			// call vehicle_arrival()
+			// create a pthread to represent the vehicle, vehicle_routine() is the start function of a pthread
+			
+			int vehicle_id = j; // all of the vehicles are cars
+			//int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int vehicle_type = ((float)rand() / RAND_MAX < carprob) ? 1 : 2; // 1 for car, 2 for truck
+			int direction = rand() % 2;
+			
+			pmstr_t* pmthread = malloc(sizeof(pmstr_t));
+			pmthread->vehicle_id = vehicle_id;
+			pmthread->vehicle_type = vehicle_type;
+			pmthread->direction = direction;
+			
+			pthread_create(&vehicle[j], NULL, (void *)vehicle_routine, (void *)pmthread);
+			//pthread_join(pmthread, NULL);
+		}
+		
+		pthread_mutex_unlock(&lock);
+
+		for (int j = 0; j <= 29; j++){
+			pthread_join(vehicle[j], NULL);
+		}
+	  
 	} // end of option6
 
 
@@ -331,10 +570,15 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 		movingcar--;
 		movinglistdelete(pmstrpara->vehicle_id);
 
-		pthread_cond_signal(&CarNorthMovable);
-		pthread_cond_signal(&CarSouthMovable);
-		pthread_cond_signal(&TruckNorthMovable);
-		pthread_cond_signal(&TruckSouthMovable);
+		if (waitingtrucksouth > 0 || waitingtrucknorth > 0) {
+    	// If trucks are waiting, signal them preferably
+			pthread_cond_signal(&TruckNorthMovable);
+			pthread_cond_signal(&TruckSouthMovable);
+		} else {
+			// No trucks waiting, signal cars based on direction to maintain fairness
+			pthread_cond_signal(&CarNorthMovable);
+			pthread_cond_signal(&CarSouthMovable);
+}
 
 		//update global variables
 		//send out signals to wake up vehicle(s) accordingly
@@ -344,7 +588,7 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 
 		pthread_mutex_unlock(&lock);
 
-
+		free(pmstrpara);
 	}
 	else if(pmstrpara->vehicle_type == 2) //truck
 	{
@@ -382,10 +626,15 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 		movingtruck--;
 		movinglistdelete(pmstrpara->vehicle_id);
 
-		pthread_cond_signal(&CarNorthMovable);
-		pthread_cond_signal(&CarSouthMovable);
-		pthread_cond_signal(&TruckNorthMovable);
-		pthread_cond_signal(&TruckSouthMovable);
+		if (waitingtrucksouth > 0 || waitingtrucknorth > 0) {
+			// If trucks are waiting, signal them preferably
+			pthread_cond_signal(&TruckNorthMovable);
+			pthread_cond_signal(&TruckSouthMovable);
+		} else {
+			// No trucks waiting, signal cars based on direction to maintain fairness
+			pthread_cond_signal(&CarNorthMovable);
+			pthread_cond_signal(&CarSouthMovable);
+		}
 
 		//update global variables
 		//send out signals to wake up vehicle(s) accordingly
@@ -395,8 +644,9 @@ void *vehicle_routine(pmstr_t *pmstrpara) {
 
 		pthread_mutex_unlock(&lock);
 
-
+		free(pmstrpara);
 	}
+	
 
 }
 
@@ -406,7 +656,7 @@ void vehicle_arrival(pmstr_t *pmstrpara)
 {
 	if(pmstrpara->vehicle_type == 1)
 	{
-		if (pmstrpara->direction == 0)
+		if (pmstrpara->direction == 1)
 			waitingcarsouth++;
 		else
 			waitingcarnorth++;
@@ -422,14 +672,14 @@ void vehicle_arrival(pmstr_t *pmstrpara)
 
 	if(pmstrpara->vehicle_type == 1)
 	{
-		if (pmstrpara->direction == 0)
+		if (pmstrpara->direction == 1)
 			fprintf(stderr,"\nCar #%d (southbound) arrived.\n",pmstrpara->vehicle_id);
 		else
 			fprintf(stderr,"\nCar #%d (northbound) arrived.\n",pmstrpara->vehicle_id);
 	}
 	else
 	{
-		if (pmstrpara->direction == 0)
+		if (pmstrpara->direction == 1)
 			fprintf(stderr,"\nTruck #%d (southbound) arrived.\n",pmstrpara->vehicle_id);
 		else
 			fprintf(stderr,"\nTruck #%d (northbound) arrived.\n",pmstrpara->vehicle_id);
